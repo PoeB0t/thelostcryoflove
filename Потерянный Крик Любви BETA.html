@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Потерянный Крик Любви</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap">
+<style>
+:root{--teal:#008080;--gray:#c0c0c0;--navy:#000080;--dk:#808080;--px:"Press Start 2P","Courier New",monospace;--ui:Tahoma,Verdana,"MS Sans Serif",Arial,sans-serif;box-sizing:border-box}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:60px}
+body{background:var(--teal);color:#000;font:14px/1.45 var(--ui);padding:calc(44px + env(safe-area-inset-top,0px)) 12px calc(60px + env(safe-area-inset-bottom,0px));overflow-x:hidden;-webkit-font-smoothing:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:1px dotted #000;outline-offset:-4px}
+
+.raised{background:var(--gray);border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px var(--dk),inset 1px 1px #dfdfdf}
+.sunken{background:#fff;border:2px solid;border-color:var(--dk) #fff #fff var(--dk);box-shadow:inset 1px 1px #404040,inset -1px -1px #dfdfdf}
+.btn{display:inline-block;background:var(--gray);padding:5px 16px;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px var(--dk),inset 1px 1px #dfdfdf;font-weight:700;min-height:28px}
+.btn:active{border-color:#404040 #fff #fff #404040;box-shadow:inset 1px 1px var(--dk);padding:6px 15px 4px 17px}
+
+/* top bar + taskbar */
+.top{position:fixed;top:0;left:0;right:0;z-index:30;padding:calc(4px + env(safe-area-inset-top,0px)) 8px 4px;display:flex;align-items:center;gap:6px;border-width:0 0 2px;border-style:solid;border-color:#fff #404040 #404040 #fff;background:var(--gray);box-shadow:0 2px #000}
+.top .logo{font:10px var(--px);padding:8px;white-space:nowrap}
+.top ul{display:flex;list-style:none;padding:0;gap:2px;flex:1;overflow-x:auto}
+.top ul a{padding:5px 12px;display:block}
+.top ul a:hover{background:var(--navy);color:#fff}
+.shop{font-family:var(--px);font-size:10px;padding:8px 12px;text-transform:uppercase}
+.top select{font:700 13px var(--ui);padding:4px 6px;min-height:28px;background:var(--gray);border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px var(--dk);cursor:pointer}
+@media(max-width:760px){.top ul{display:none}.top .logo{flex:1}}
+@media(max-width:560px){.top .logo{display:none}.top select{margin-left:auto}}
+.task{position:fixed;bottom:0;left:0;right:0;z-index:30;padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;align-items:center;border-top:2px solid #fff;background:var(--gray);box-shadow:0 -1px #dfdfdf}
+.start{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;padding:4px 12px}
+.start svg{width:20px;height:20px}
+.sp1{flex:1}
+.tray{padding:6px 12px;font-family:"VT323",monospace;font-size:20px;line-height:1;min-width:76px;text-align:center;border:2px solid;border-color:var(--dk) #fff #fff var(--dk)}
+.menu{position:fixed;left:4px;bottom:calc(52px + env(safe-area-inset-bottom,0px));z-index:40;width:230px;padding:3px;display:none}
+.menu.open{display:block}
+.menu a,.menu button{display:flex;gap:10px;align-items:center;width:100%;padding:10px 14px;background:none;border:0;text-align:left;font-size:15px}
+.menu a:hover,.menu button:hover{background:var(--navy);color:#fff}
+.menu hr{border:0;border-top:1px solid var(--dk);border-bottom:1px solid #fff;margin:3px 2px}
+
+/* windows */
+.win{max-width:1000px;margin:0 auto 26px;padding:3px;box-shadow:inset -1px -1px var(--dk),inset 1px 1px #dfdfdf,4px 4px 0 #000}
+.win.pop{animation:pop .35s steps(4) both}
+@keyframes pop{from{opacity:0;transform:scale(.92)}}
+.tb{background:var(--navy);color:#fff;font-weight:700;display:flex;align-items:center;gap:8px;padding:3px 3px 3px 6px;font-size:14px;user-select:none}
+.tb i{width:16px;height:16px;flex:none}
+.tb span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tb button{width:22px;height:20px;padding:0;font:700 13px/1 var(--ui);background:var(--gray);border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:inset -1px -1px var(--dk)}
+.tb button:active{border-color:#404040 #fff #fff #404040}
+.wb{padding:12px}
+.win.shake{animation:shake .4s steps(8)}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.win.min .wb{display:none}
+h2{font:700 14px var(--px)}
+
+/* hero */
+.screen{position:relative;min-height:min(70vh,560px);display:grid;place-items:center;text-align:center;overflow:hidden;background:repeating-conic-gradient(#10104a 0 25%,#000 0 50%) 0 0/16px 16px;color:#fff;padding:30px 12px}
+.bgmedia{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.screen::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.4);pointer-events:none}
+.screen>div{position:relative;z-index:2}
+.ttl{font:clamp(22px,6vw,64px)/1.35 var(--px);color:#ff0;text-shadow:4px 4px 0 #f0f,8px 8px 0 #000}
+.ttl b{display:block;overflow:hidden;white-space:nowrap;width:10ch;animation:type 1.4s steps(10) both;font-weight:400}
+.ttl b+b{width:10ch;animation-delay:1.5s;color:#0ff}
+.ttl b:last-child::after{content:"_";animation:blink 1s steps(1) infinite}
+@keyframes type{from{width:0}}
+@keyframes blink{50%{opacity:0}}
+.ttl b+b{animation-name:type2}
+@keyframes type2{from{width:0;opacity:0}1%{opacity:1}}
+.ticker{overflow:hidden;white-space:nowrap;padding:5px 0;font:10px var(--px);background:#000;color:#0f0;border:2px solid;border-color:var(--dk) #fff #fff var(--dk)}
+.ticker span{display:inline-block;padding-left:100%;animation:tick 22s steps(120) infinite}
+@keyframes tick{to{transform:translateX(-100%)}}
+.heart{position:absolute;z-index:1;color:#f0f;font:16px var(--px);animation:up 5s steps(10) infinite;bottom:-20px}
+@keyframes up{to{transform:translateY(-110vh) translateX(20px)}}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;padding:14px 4px 4px}
+fieldset{border:2px groove #fff;padding:6px 10px 12px;min-width:0}
+legend{padding:0 6px;font-weight:700}
+.ic{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ic a{width:72px;text-align:center;padding:4px 0;font-size:12px}
+.ic a em{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 4px;font:700 11px var(--px);font-style:normal;color:#fff;border:2px solid;border-color:#fff #000 #000 #fff;image-rendering:pixelated;transition:none}
+.ic a:hover em{animation:hop .5s steps(2) infinite}
+@keyframes hop{50%{transform:translateY(-5px)}}
+.ic a:hover span{background:var(--navy);color:#fff;outline:1px dotted #ff0}
+.ic span{display:inline-block;padding:1px 3px}
+.ic em.own{background:none!important;border:0!important}
+.ic em img{width:100%;height:100%;object-fit:contain}
+.fine{font-size:9px;line-height:1.3;color:#555;text-align:center;margin-top:8px}
+
+/* about */
+.note{font:20px/1.3 "VT323","Courier New",monospace;padding:12px;min-height:160px}
+.note p{font-size:22px}
+.mb{display:flex;gap:16px;padding:2px 8px;font-size:13px;border-bottom:1px solid var(--dk);margin-bottom:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.stat{padding:12px;text-align:center}
+.stat b{display:block;font:20px var(--px);color:var(--navy);margin-bottom:8px}
+.prog{height:26px;padding:3px;margin-top:12px}
+.prog i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--navy) 0 14px,transparent 14px 17px);animation:load 4s steps(14) infinite}
+@keyframes load{from{width:0}to{width:100%}}
+.cap{font-size:12px;margin-top:4px}
+
+/* members */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+.mem{padding:3px;box-shadow:inset -1px -1px var(--dk),inset 1px 1px #dfdfdf,3px 3px 0 #000}
+.mem:hover{animation:hop .6s steps(2) infinite}
+.ph{aspect-ratio:4/5;display:grid;place-items:center;font:56px var(--px);color:#fff;text-shadow:4px 4px 0 #000;overflow:hidden;background-image:repeating-conic-gradient(rgba(255,255,255,.12) 0 25%,transparent 0 50%);background-size:12px 12px}
+.ph img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.p1{background-color:#800080}.p2{background-color:#800000}.p3{background-color:#006400}.p4{background-color:#000080}
+.mem .info{padding:8px;margin-top:6px}
+.mem h3{font:12px var(--px);margin-bottom:8px}
+
+/* gallery */
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center}
+.shot{aspect-ratio:16/9;display:grid;place-items:center;text-align:center;font:12px/1.6 var(--px);color:#fff;overflow:hidden;background-image:repeating-conic-gradient(rgba(255,255,255,.12) 0 25%,transparent 0 50%);background-size:16px 16px}
+.shot img,.shot video{width:100%;height:100%;object-fit:cover}
+.s1{background-color:#800080}.s2{background-color:#008000}.s3{background-color:#000080}.s4{background-color:#800000}.s5{background-color:#808000}.s6{background-color:#004040}
+figcaption{margin-top:8px;padding:6px 10px;font:700 15px var(--ui);min-height:30px}
+.ctrl{display:flex;gap:8px;align-items:center;margin-top:10px}
+.cnt{margin-left:auto;padding:4px 10px;font:10px var(--px)}
+
+/* offices */
+.off{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.o{display:flex;gap:14px;align-items:center;padding:14px}
+.o svg{width:56px;height:56px;flex:none;image-rendering:pixelated;shape-rendering:crispEdges}
+.o small{display:block;color:#444}
+.o h3{font:11px/1.5 var(--px)}
+
+/* dialog + sparks */
+.dlg{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:60;width:min(360px,92vw);padding:3px;display:none;box-shadow:inset -1px -1px var(--dk),inset 1px 1px #dfdfdf,6px 6px 0 #000}
+.dlg.open{display:block;animation:pop .25s steps(3)}
+.dlg .wb{display:flex;gap:16px;align-items:center}
+.dlg .x{width:36px;height:36px;border-radius:50%;background:#f00;color:#fff;font:700 24px/36px var(--ui);text-align:center;flex:none}
+.dlg .ok{display:block;margin:0 auto 14px;min-width:90px}
+.sp{position:fixed;z-index:70;width:6px;height:6px;pointer-events:none;animation:fall .8s steps(8) forwards}
+@keyframes fall{to{transform:translateY(40px);opacity:0}}
+footer{max-width:1000px;margin:0 auto;background:var(--navy);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;border:2px solid;border-color:#fff #404040 #404040 #fff;box-shadow:4px 4px 0 #000}
+footer .l{font:10px/1.9 var(--px)}
+footer .r{font-size:11px;line-height:1.5;text-align:right;margin-left:auto}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="folder" viewBox="0 0 16 16"><rect x="1" y="3" width="6" height="2" fill="#c8a000"/><rect x="1" y="5" width="14" height="9" fill="#ffe040"/><rect x="1" y="5" width="14" height="1" fill="#fff8a0"/><rect x="1" y="13" width="14" height="1" fill="#806000"/><rect x="14" y="5" width="1" height="9" fill="#806000"/></symbol>
+<symbol id="pc" viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="9" fill="#c0c0c0"/><rect x="3" y="4" width="10" height="5" fill="#008080"/><rect x="6" y="11" width="4" height="2" fill="#808080"/><rect x="3" y="13" width="10" height="1" fill="#404040"/><rect x="1" y="10" width="14" height="1" fill="#808080"/></symbol>
+</defs></svg>
+
+<div class="top" id="topbar">
+  <a class="logo btn" href="#top">ПКЛ.EXE</a>
+  <ul>
+    <li><a href="#about" data-i="na">О группе</a></li>
+    <li><a href="#members" data-i="nm">Участники</a></li>
+    <li><a href="#gallery" data-i="ng">Галерея</a></li>
+  </ul>
+  <select id="lang" aria-label="Language / Язык">
+    <option value="ru">Русский</option><option value="en">English</option><option value="tt">Татарча</option><option value="de">Deutsch</option><option value="kk">Қазақ</option><option value="uk">Українська</option><option value="be">Беларуская</option><option value="ka">ქართული</option><option value="hy">Հայերեն</option><option value="zh">中文</option>
+  </select>
+  <!-- РЕЛИЗЫ: впишите ссылку на вашу страницу в href -->
+  <a class="btn shop" href="#" data-i="rel">Релизы</a>
+  <button class="btn shop" id="shop" data-i="shop">Товары</button>
+</div>
+
+<main id="top">
+<!-- HERO -->
+<section class="win raised pop">
+  <div class="tb"><svg class="i" width="16" height="16" viewBox="0 0 16 16" style="width:16px"><use href="#pc"/></svg><span>Потерянный Крик Любви.exe</span><button data-min aria-label="Свернуть">_</button><button disabled aria-label="Развернуть">□</button><button data-x aria-label="Закрыть">×</button></div>
+  <div class="wb" style="padding:4px">
+    <div class="screen sunken" id="screen">
+      <!-- ФОН: положите concert.mp4 рядом с файлом. Для гифки замените <video> на <img class="bgmedia" src="concert.gif" alt=""> -->
+      <video class="bgmedia" autoplay muted loop playsinline><source src="concert.mp4" type="video/mp4"></video>
+      <div><h1 class="ttl"><b>ПОТЕРЯННЫЙ</b><b>КРИК ЛЮБВИ</b></h1></div>
+    </div>
+    <div class="ticker" aria-hidden="true"><span data-i="tk">★ ДОБРО ПОЖАЛОВАТЬ ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ВСЯ ИНФОРМАЦИЯ О НАС ★ ТОВАРЫ, МЕРЧИ, БИЛЕТЫ, АНОНСЫ ★</span></div>
+    <!-- СВОИ ИКОНКИ: у нужной иконки впишите путь к картинке в data-icon, например data-icon="instagram.png" (подойдут .png, .ico, .gif, .svg). Размер останется прежним. Пусто = стандартная иконка. -->
+    <div class="groups">
+      <fieldset><legend data-i="soc">Соцсети</legend>
+        <div class="ic">
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#0077ff">VK</em><span>ВКонтакте</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#1c9ad6">TG</em><span>Telegram</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#c2185b">IG</em><span>Instagram*</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#d00000">YT</em><span>YouTube</span></a>
+        </div>
+        <p class="fine" data-i="fine">*принадлежит Meta, признанной экстремистской и запрещённой на территории РФ.</p>
+      </fieldset>
+      <fieldset><legend data-i="lis">Слушать</legend>
+        <div class="ic">
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#ffcc00;color:#000;font-size:16px">Я</em><span>Яндекс</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#128a3e">SP</em><span>Spotify</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#e0102a;font-size:16px">♪</em><span>Apple</span></a>
+          <a href="#" target="_blank" rel="noopener" data-icon=""><em style="background:#0055cc;font-size:16px">♫</em><span>VK Музыка</span></a>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="win raised pop" id="about">
+  <div class="tb"><span data-i="ta">О группе.txt — Блокнот</span><button data-min>_</button><button disabled>□</button><button data-x>×</button></div>
+  <div class="wb">
+    <div class="mb" data-i="mb"><span>Файл</span><span>Правка</span><span>Формат</span><span>Вид</span><span>Справка</span></div>
+    <div class="note sunken">
+      <p data-i="ab">Потерянный Крик Любви — это группа, которая превращает личное в громкое. Мы пишем песни о близости, потерях и том, что остаётся после. Живые выступления, честные тексты и звук, который не прячется.</p>
+    </div>
+    <div class="stats">
+      <div class="stat raised"><b>2025</b><span data-i="s1">год основания</span></div>
+      <div class="stat raised"><b>4</b><span data-i="s2">участника</span></div>
+      <div class="stat raised"><b>4</b><span data-i="s3">офиса</span></div>
+    </div>
+    <p class="cap" data-i="ld">Загрузка любви...</p>
+    <div class="prog sunken"><i></i></div>
+  </div>
+</section>
+
+<!-- MEMBERS -->
+<section class="win raised pop" id="members">
+  <div class="tb"><svg width="16" height="16" viewBox="0 0 16 16" style="width:16px"><use href="#folder"/></svg><span data-i="tm">C:\Участники</span><button data-min>_</button><button disabled>□</button><button data-x>×</button></div>
+  <div class="wb">
+    <!-- ФОТО: внутри .ph замените букву на <img src="emil.jpg" alt="Эмиль"> -->
+    <div class="grid">
+      <article class="mem raised"><div class="tb" style="font-size:12px"><span>Эмиль.bmp</span></div><div class="ph p1">Э</div><div class="info sunken"><h3>Эмиль</h3><span data-i="r1">Вокал и соло-гитара</span></div></article>
+      <article class="mem raised"><div class="tb" style="font-size:12px"><span>Амина.bmp</span></div><div class="ph p2">А</div><div class="info sunken"><h3>Амина</h3><span data-i="r2">Второй вокал</span></div></article>
+      <article class="mem raised"><div class="tb" style="font-size:12px"><span>Артур.bmp</span></div><div class="ph p3">А</div><div class="info sunken"><h3>Артур</h3><span data-i="r3">Бас-гитара</span></div></article>
+      <article class="mem raised"><div class="tb" style="font-size:12px"><span>Дементий.bmp</span></div><div class="ph p4">Д</div><div class="info sunken"><h3>Дементий</h3><span data-i="r4">Барабаны</span></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="win raised pop" id="gallery">
+  <div class="tb"><span id="gt" data-i="tg">Просмотр изображений</span><button data-min>_</button><button disabled>□</button><button data-x>×</button></div>
+  <div class="wb">
+    <!-- Все кадры одного размера (16:9). Вместо текста в .shot вставьте <img src="..."> или <video autoplay muted loop playsinline src="...">. Подпись пишется в <figcaption>. -->
+    <div class="track sunken" id="track">
+      <figure class="slide"><div class="shot s1">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Киев 2005</figcaption></figure>
+      <figure class="slide"><div class="shot s2">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Город, год</figcaption></figure>
+      <figure class="slide"><div class="shot s3">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Город, год</figcaption></figure>
+      <figure class="slide"><div class="shot s4">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Город, год</figcaption></figure>
+      <figure class="slide"><div class="shot s5">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Город, год</figcaption></figure>
+      <figure class="slide"><div class="shot s6">ФОТО, ГИФКА<br>ИЛИ ВИДЕО</div><figcaption class="sunken">Город, год</figcaption></figure>
+    </div>
+    <div class="ctrl">
+      <button class="btn" id="prev">◄ <span data-i="pv">Назад</span></button>
+      <button class="btn" id="next"><span data-i="nx">Вперёд</span> ►</button>
+      <span class="cnt sunken" id="cnt">1 / 6</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="l"><span data-i="rt">© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. ВСЕ ПРАВА ЗАЩИЩЕНЫ.</span><br>Timur Ramazanov Prod.</div><div class="r" data-i="off">Офисы: Никосия, Кипр<br>Набережные Челны, Россия<br>Дублин, Ирландия<br>Варшава, Польша</div></footer>
+
+<div class="menu raised" id="menu">
+  <a href="#about" data-i="na">О группе</a><a href="#members" data-i="nm">Участники</a><a href="#gallery" data-i="ng">Галерея</a><a href="#" data-i="rel">Релизы</a><hr>
+  <button id="shop2" data-i="shop">Товары</button>
+</div>
+<div class="task">
+  <button class="btn start" id="start"><svg viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="1" y="1" width="6" height="6" fill="#f00"/><rect x="9" y="1" width="6" height="6" fill="#0a0"/><rect x="1" y="9" width="6" height="6" fill="#00f"/><rect x="9" y="9" width="6" height="6" fill="#ff0"/></svg><span data-i="start">Пуск</span></button>
+  <span class="sp1"></span>
+  <div class="tray" id="clock">00:00</div>
+</div>
+
+<div class="dlg raised" id="dlg" role="dialog" aria-modal="true">
+  <div class="tb"><span data-i="shop">Товары</span><button data-ok aria-label="Закрыть">×</button></div>
+  <div class="wb"><div class="x">×</div><p data-i="soon">Магазин скоро откроется.<br>Попробуйте позже.</p></div>
+  <button class="btn ok" data-ok>OK</button>
+</div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)},all=function(s){return document.querySelectorAll(s)};
+  // window animations
+  var io='IntersectionObserver' in window;
+  all('.win').forEach(function(w){
+    w.querySelector('[data-min]').onclick=function(){w.classList.toggle('min')};
+    w.querySelector('[data-x]').onclick=function(){w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake')};
+  });
+  // dialog
+  var d=$('#dlg');
+  function openD(){d.classList.add('open');d.querySelector('.ok').focus()}
+  $('#shop').onclick=openD;$('#shop2').onclick=function(){$('#menu').classList.remove('open');openD()};
+  all('[data-ok]').forEach(function(b){b.onclick=function(){d.classList.remove('open')}});
+  // start menu
+  var m=$('#menu');
+  $('#start').onclick=function(e){e.stopPropagation();m.classList.toggle('open')};
+  document.addEventListener('click',function(){m.classList.remove('open')});
+  // clock
+  function tick(){var t=new Date();$('#clock').textContent=('0'+t.getHours()).slice(-2)+':'+('0'+t.getMinutes()).slice(-2)}
+  tick();setInterval(tick,15000);
+  // language
+  var D={
+en:{na:"About",nm:"Members",ng:"Gallery",rel:"Releases",shop:"Shop",start:"Start",soc:"Social media",lis:"Listen",fine:"*owned by Meta, which is recognised as extremist and banned in the Russian Federation.",tk:"★ WELCOME ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ LIVE CONCERTS ★",ta:"About.txt — Notepad",tm:"C:\\Members",tg:"Image Viewer",mb:"File|Edit|Format|View|Help",ab:"Потерянный Крик Любви is a band that turns the personal into the loud. We write songs about closeness, loss and what remains. Live shows, honest lyrics and a sound that doesn't hide.",s1:"founded",s2:"members",s3:"offices",ld:"Loading love...",r1:"Vocals & lead guitar",r2:"Second vocals",r3:"Bass guitar",r4:"Drums",pv:"Back",nx:"Next",soon:"The shop opens soon.<br>Please try again later.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. ALL RIGHTS RESERVED.",off:"Offices: Nicosia, Cyprus<br>Naberezhnye Chelny, Russia<br>Dublin, Ireland<br>Warsaw, Poland"},
+tt:{na:"Төркем турында",nm:"Катнашучылар",ng:"Галерея",rel:"Релизлар",shop:"Кибет",start:"Башлау",soc:"Социаль челтәрләр",lis:"Тыңлау",fine:"*Meta милке, ул Россия Федерациясендә экстремистик дип танылган һәм тыелган.",tk:"★ ИСӘНМЕСЕЗ ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ТЕРЕ КОНЦЕРТЛАР ★",ta:"Төркем турында.txt — Блокнот",tm:"C:\\Катнашучылар",tg:"Рәсемнәр карау",mb:"Файл|Төзәтү|Формат|Күренеш|Белешмә",ab:"Потерянный Крик Любви — шәхсине көчле тавышка әйләндерүче төркем. Без якынлык, югалтулар һәм алардан соң калганнар турында җырлар язабыз. Тере чыгышлар, ихлас сүзләр һәм яшеренми торган тавыш.",s1:"нигез салынган",s2:"катнашучы",s3:"офис",ld:"Мәхәббәт йөкләнә...",r1:"Вокал һәм соло-гитара",r2:"Икенче вокал",r3:"Бас-гитара",r4:"Барабаннар",pv:"Артка",nx:"Алга",soon:"Кибет тиздән ачыла.<br>Соңрак кабатлап карагыз.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. БАРЛЫК ХОКУКЛАР САКЛАНГАН.",off:"Офислар: Никосия, Кипр<br>Яр Чаллы, Россия<br>Дублин, Ирландия<br>Варшава, Польша"},
+de:{na:"Über uns",nm:"Mitglieder",ng:"Galerie",rel:"Releases",shop:"Shop",start:"Start",soc:"Soziale Netzwerke",lis:"Anhören",fine:"*gehört zu Meta, das in der Russischen Föderation als extremistisch eingestuft und verboten ist.",tk:"★ WILLKOMMEN ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ LIVE-KONZERTE ★",ta:"Über uns.txt — Editor",tm:"C:\\Mitglieder",tg:"Bildanzeige",mb:"Datei|Bearbeiten|Format|Ansicht|Hilfe",ab:"Потерянный Крик Любви ist eine Band, die Persönliches laut werden lässt. Wir schreiben Songs über Nähe, Verlust und das, was bleibt. Live-Auftritte, ehrliche Texte und ein Sound, der sich nicht versteckt.",s1:"gegründet",s2:"Mitglieder",s3:"Büros",ld:"Liebe wird geladen...",r1:"Gesang & Leadgitarre",r2:"Zweite Stimme",r3:"Bassgitarre",r4:"Schlagzeug",pv:"Zurück",nx:"Weiter",soon:"Der Shop öffnet bald.<br>Bitte versuche es später erneut.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. ALLE RECHTE VORBEHALTEN.",off:"Büros: Nikosia, Zypern<br>Nabereschnyje Tschelny, Russland<br>Dublin, Irland<br>Warschau, Polen"},
+kk:{na:"Топ туралы",nm:"Қатысушылар",ng:"Галерея",rel:"Релиздер",shop:"Дүкен",start:"Бастау",soc:"Әлеуметтік желілер",lis:"Тыңдау",fine:"*Meta-ға тиесілі, ол Ресей Федерациясында экстремистік деп танылған және тыйым салынған.",tk:"★ ҚОШ КЕЛДІҢІЗДЕР ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ТІКЕЛЕЙ КОНЦЕРТТЕР ★",ta:"Топ туралы.txt — Блокнот",tm:"C:\\Қатысушылар",tg:"Суреттерді қарау",mb:"Файл|Түзету|Пішім|Көрініс|Анықтама",ab:"Потерянный Крик Любви — жеке сезімді қатты дыбысқа айналдыратын топ. Біз жақындық, жоғалту және одан кейін қалатын нәрсе туралы ән жазамыз. Тікелей концерттер, шынайы сөздер және жасырынбайтын дыбыс.",s1:"құрылған жылы",s2:"қатысушы",s3:"кеңсе",ld:"Махаббат жүктелуде...",r1:"Вокал және соло-гитара",r2:"Екінші вокал",r3:"Бас-гитара",r4:"Барабан",pv:"Артқа",nx:"Алға",soon:"Дүкен жақында ашылады.<br>Кейінірек қайталап көріңіз.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. БАРЛЫҚ ҚҰҚЫҚТАР ҚОРҒАЛҒАН.",off:"Кеңселер: Никосия, Кипр<br>Набережные Челны, Ресей<br>Дублин, Ирландия<br>Варшава, Польша"},
+uk:{na:"Про гурт",nm:"Учасники",ng:"Галерея",rel:"Релізи",shop:"Товари",start:"Пуск",soc:"Соцмережі",lis:"Слухати",fine:"*належить Meta, яку визнано екстремістською та забороненою на території РФ.",tk:"★ ЛАСКАВО ПРОСИМО ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ЖИВІ КОНЦЕРТИ ★",ta:"Про гурт.txt — Блокнот",tm:"C:\\Учасники",tg:"Перегляд зображень",mb:"Файл|Правка|Формат|Вигляд|Довідка",ab:"Потерянный Крик Любви — це гурт, який перетворює особисте на гучне. Ми пишемо пісні про близькість, втрати та те, що залишається потім. Живі виступи, чесні тексти і звук, який не ховається.",s1:"рік заснування",s2:"учасники",s3:"офіси",ld:"Завантаження кохання...",r1:"Вокал і соло-гітара",r2:"Другий вокал",r3:"Бас-гітара",r4:"Барабани",pv:"Назад",nx:"Далі",soon:"Крамниця скоро відкриється.<br>Спробуйте пізніше.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. УСІ ПРАВА ЗАХИЩЕНО.",off:"Офіси: Нікосія, Кіпр<br>Набережні Човни, Росія<br>Дублін, Ірландія<br>Варшава, Польща"},
+be:{na:"Пра гурт",nm:"Удзельнікі",ng:"Галерэя",rel:"Рэлізы",shop:"Тавары",start:"Пуск",soc:"Сацсеткі",lis:"Слухаць",fine:"*належыць Meta, прызнанай экстрэмісцкай і забароненай на тэрыторыі РФ.",tk:"★ ЛАСКАВА ПРАСІМ ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ЖЫВЫЯ КАНЦЭРТЫ ★",ta:"Пра гурт.txt — Блакнот",tm:"C:\\Удзельнікі",tg:"Прагляд відарысаў",mb:"Файл|Правіць|Фармат|Выгляд|Даведка",ab:"Потерянный Крик Любви — гэта гурт, які ператварае асабістае ў гучнае. Мы пішам песні пра блізкасць, страты і тое, што застаецца пасля. Жывыя выступы, шчырыя тэксты і гук, які не хаваецца.",s1:"год заснавання",s2:"удзельнікі",s3:"офісы",ld:"Загрузка кахання...",r1:"Вакал і саля-гітара",r2:"Другі вакал",r3:"Бас-гітара",r4:"Барабаны",pv:"Назад",nx:"Далей",soon:"Крама хутка адкрыецца.<br>Паспрабуйце пазней.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. УСЕ ПРАВЫ ЗАХАВАНЫЯ.",off:"Офісы: Нікасія, Кіпр<br>Набярэжныя Чалны, Расія<br>Дублін, Ірландыя<br>Варшава, Польшча"},
+ka:{na:"ჯგუფის შესახებ",nm:"წევრები",ng:"გალერეა",rel:"რელიზები",shop:"მაღაზია",start:"დაწყება",soc:"სოციალური ქსელები",lis:"მოსმენა",fine:"*ეკუთვნის Meta-ს, რომელიც რუსეთის ფედერაციაში აღიარებულია ექსტრემისტულად და აკრძალულია.",tk:"★ კეთილი იყოს თქვენი მობრძანება ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ცოცხალი კონცერტები ★",ta:"ჯგუფის შესახებ.txt — Notepad",tm:"C:\\წევრები",tg:"სურათების ნახვა",mb:"ფაილი|რედაქტირება|ფორმატი|ხედი|დახმარება",ab:"Потерянный Крик Любви — ჯგუფია, რომელიც პირადს ხმამაღალად აქცევს. ვწერთ სიმღერებს სიახლოვეზე, დანაკარგზე და იმაზე, რაც შემდეგ რჩება. ცოცხალი გამოსვლები, გულწრფელი ტექსტები და ხმა, რომელიც არ იმალება.",s1:"დაარსების წელი",s2:"წევრი",s3:"ოფისი",ld:"სიყვარული იტვირთება...",r1:"ვოკალი და სოლო გიტარა",r2:"მეორე ვოკალი",r3:"ბას გიტარა",r4:"დრამები",pv:"უკან",nx:"წინ",soon:"მაღაზია მალე გაიხსნება.<br>სცადეთ მოგვიანებით.",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. ყველა უფლება დაცულია.",off:"ოფისები: ნიკოსია, კვიპროსი<br>ნაბერეჟნიე ჩელნი, რუსეთი<br>დუბლინი, ირლანდია<br>ვარშავა, პოლონეთი"},
+hy:{na:"Խմբի մասին",nm:"Անդամներ",ng:"Պատկերասրահ",rel:"Թողարկումներ",shop:"Խանութ",start:"Մեկնարկ",soc:"Սոցիալական ցանցեր",lis:"Լսել",fine:"*պատկանում է Meta-ին, որը ճանաչվել է ծայրահեղական և արգելված է ՌԴ տարածքում։",tk:"★ ԲԱՐԻ ԳԱԼՈՒՍՏ ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ ԿԵՆԴԱՆԻ ՀԱՄԵՐԳՆԵՐ ★",ta:"Խմբի մասին.txt — Նոթատետր",tm:"C:\\Անդամներ",tg:"Պատկերների դիտում",mb:"Ֆայլ|Խմբագրում|Ձևաչափ|Տեսք|Օգնություն",ab:"Потерянный Крик Любви-ն խումբ է, որը անձնականը դարձնում է բարձրաձայն։ Մենք երգեր ենք գրում մտերմության, կորստի և հետո մնացածի մասին։ Կենդանի ելույթներ, անկեղծ տեքստեր և ձայն, որը չի թաքնվում։",s1:"հիմնադրման տարի",s2:"անդամ",s3:"գրասենյակ",ld:"Սերը բեռնվում է...",r1:"Վոկալ և սոլո կիթառ",r2:"Երկրորդ վոկալ",r3:"Բաս կիթառ",r4:"Թմբուկներ",pv:"Հետ",nx:"Առաջ",soon:"Խանութը շուտով կբացվի։<br>Փորձեք ավելի ուշ։",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. ԲՈԼՈՐ ԻՐԱՎՈՒՆՔՆԵՐԸ ՊԱՇՏՊԱՆՎԱԾ ԵՆ։",off:"Գրասենյակներ՝ Նիկոսիա, Կիպրոս<br>Նաբերեժնիե Չելնի, Ռուսաստան<br>Դուբլին, Իռլանդիա<br>Վարշավա, Լեհաստան"},
+zh:{na:"关于乐队",nm:"成员",ng:"相册",rel:"发行作品",shop:"商店",start:"开始",soc:"社交媒体",lis:"收听",fine:"*属于 Meta，该公司在俄罗斯联邦被认定为极端组织并被禁止。",tk:"★ 欢迎 ★ ПОТЕРЯННЫЙ КРИК ЛЮБВИ ★ 现场演出 ★",ta:"关于乐队.txt — 记事本",tm:"C:\\成员",tg:"图片查看器",mb:"文件|编辑|格式|查看|帮助",ab:"Потерянный Крик Любви 是一支把私人情感变成呐喊的乐队。我们的歌写亲密、失去，以及之后留下的一切。现场演出、真诚的歌词，以及不躲藏的声音。",s1:"成立年份",s2:"位成员",s3:"个办公室",ld:"正在加载爱...",r1:"主唱兼主音吉他",r2:"第二主唱",r3:"贝斯",r4:"鼓",pv:"上一张",nx:"下一张",soon:"商店即将开业。<br>请稍后再试。",rt:"© 2026 ПОТЕРЯННЫЙ КРИК ЛЮБВИ. 保留所有权利。",off:"办公室：尼科西亚，塞浦路斯<br>纳别列日内耶切尔尼，俄罗斯<br>都柏林，爱尔兰<br>华沙，波兰"}
+};
+  var ln=all('[data-i]'),orig=[];
+  ln.forEach(function(n){orig.push(n.innerHTML)});
+  function setLang(c){
+    ln.forEach(function(n,i){
+      var k=n.getAttribute('data-i'),v=c==='ru'?orig[i]:(D[c]&&D[c][k]);
+      if(v==null)return;
+      n.innerHTML=(k==='mb'&&c!=='ru')?v.split('|').map(function(x){return '<span>'+x+'</span>'}).join(''):v;
+    });
+    document.documentElement.lang=c;
+    try{localStorage.setItem('lang',c)}catch(e){}
+  }
+  var sel=$('#lang');
+  sel.onchange=function(){setLang(sel.value)};
+  try{var sv=localStorage.getItem('lang');if(sv&&D[sv]){sel.value=sv;setLang(sv)}}catch(e){}
+  // custom icons
+  all('.ic a[data-icon]').forEach(function(a){
+    var src=a.getAttribute('data-icon').trim();if(!src)return;
+    var em=a.querySelector('em'),old=em.innerHTML;
+    var im=new Image();im.alt='';
+    im.onload=function(){em.classList.add('own');em.innerHTML='';em.appendChild(im)};
+    im.onerror=function(){em.innerHTML=old};
+    im.src=src;
+  });
+  // gallery
+  var t=$('#track'),n=t.children.length;
+  function w(){return t.querySelector('.slide').offsetWidth}
+  $('#prev').onclick=function(){t.scrollBy({left:-w(),behavior:'smooth'})};
+  $('#next').onclick=function(){t.scrollBy({left:w(),behavior:'smooth'})};
+  t.addEventListener('scroll',function(){var i=Math.round(t.scrollLeft/w())+1;$('#cnt').textContent=i+' / '+n});
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  // floating hearts
+  var s=$('#screen'),c=['#f0f','#ff0','#0ff','#f00'];
+  for(var i=0;i<14;i++){var h=document.createElement('span');h.className='heart';h.textContent='♥';
+    h.style.left=(Math.random()*95)+'%';h.style.animationDelay=(-Math.random()*5)+'s';h.style.color=c[i%4];h.style.fontSize=(12+Math.random()*14)+'px';s.appendChild(h)}
+  // pixel sparkle trail
+  if(matchMedia('(hover:hover)').matches){
+    var last=0,cols=['#f00','#ff0','#0f0','#0ff','#f0f','#fff'];
+    addEventListener('pointermove',function(e){var now=Date.now();if(now-last<45)return;last=now;
+      var p=document.createElement('b');p.className='sp';p.style.left=e.clientX+'px';p.style.top=e.clientY+'px';
+      p.style.background=cols[Math.floor(Math.random()*cols.length)];document.body.appendChild(p);setTimeout(function(){p.remove()},800)});
+  }
+})();
+</script>
+</body>
+</html>
